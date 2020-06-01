@@ -1,4 +1,5 @@
 <template>
+
   <tab-bar>
   <tab-bar-item path="/home" >
     <img slot="item-icon" src="~assets/img/tabbar/shouye.svg" alt="">
@@ -6,7 +7,7 @@
     <div slot="item-text">首页</div>
   </tab-bar-item>
   <tab-bar-item path="/category" activeColor="red">
-    <img slot="item-icon" src="" alt="~assets/img/tabbar/fenlei.svg">
+    <img slot="item-icon" src="~assets/img/tabbar/fenlei.svg" alt="">
     <img slot="item-icon-action" src="~assets/img/tabbar/fenlei_hover.svg" alt="">
     <div slot="item-text">分类</div>
   </tab-bar-item>
@@ -24,8 +25,8 @@
 </template>
 
 <script>
-  import TabBar from "components/common/tabbar/TabBar.vue"
-  import TabBarItem from "components/common/tabbar/TabBarItem.vue"
+  import TabBar from "components/common/tabber/TabBar"
+  import TabBarItem from "components/common/tabber/TabBarItem"
 export default{
   name: "manTabBar",
   components:{
