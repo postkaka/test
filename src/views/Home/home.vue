@@ -3,13 +3,15 @@
   <nav-bar class="home-nav">
     <div slot="center">购物街</div>
   </nav-bar>
-  <home-swiper :banners="banners"></home-swiper>
-  <recommend-view :recommends="recommends"></recommend-view>
-  <feature-view></feature-view>
-  <tab-control class="tab-control" :titles="['流行','新款','精选']"
-  @itemClick="itemClick"></tab-control>
-  <goods-list :goods="showGoods"></goods-list>
+  <scroll class="content">
+    <home-swiper :banners="banners"></home-swiper>
+    <recommend-view :recommends="recommends"></recommend-view>
+    <feature-view></feature-view>
+    <tab-control class="tab-control" :titles="['流行','新款','精选']"
+                 @itemClick="itemClick"></tab-control>
+    <goods-list :goods="showGoods"></goods-list>
 
+  </scroll>
 </div>
 </template>
 
@@ -23,6 +25,7 @@
   import GoodsList from "../../components/content/goods/GoodsList";
   //import GoodsListItem from "../../components/content/goods/GoodsListItem";
   import NavBar from "../../components/common/navbar/NavBar";
+  import scroll from "../../components/common/scroll/scroll";
 
   import {getHomeMultidata} from "../../network/home";
   import {getHomeGoods} from "../../network/home";
@@ -39,6 +42,7 @@
         GoodsList,
         //GoodsListItem,
         NavBar,
+        scroll,
       },
     data(){
         return {
@@ -106,8 +110,10 @@
 
 <style scoped>
   #home{
-    padding-top: 44px;
+    /*padding-top: 44px;*/
+    height: 100vh;
     background: white;
+    position: relative;
   }
 .home-nav{
   background-color: var(--color-tint);
@@ -122,5 +128,19 @@
     position: sticky;
     top:44px;
     z-index: 4;
+  }
+  /*.content {*/
+  /*  height: calc(100% - 93px);*/
+  /*  margin-top: 44px;*/
+  /*  overflow: hidden;*/
+  /*}*/
+  .content {
+    /*height: 300px;*/
+    overflow: hidden;
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
   }
 </style>
