@@ -3,15 +3,16 @@
   <nav-bar class="home-nav">
     <div slot="center">购物街</div>
   </nav-bar>
-  <scroll class="content">
+  <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
     <home-swiper :banners="banners"></home-swiper>
     <recommend-view :recommends="recommends"></recommend-view>
     <feature-view></feature-view>
     <tab-control class="tab-control" :titles="['流行','新款','精选']"
                  @itemClick="itemClick"></tab-control>
     <goods-list :goods="showGoods"></goods-list>
-
   </scroll>
+<!--  加v-show就是为了对下面的滚动位置进行判断如果大于1000v-show的值为true，反之为flase-->
+  <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
 </div>
 </template>
 
@@ -23,7 +24,7 @@
 
   import TabControl from "../../components/content/tabControl/TabControl"
   import GoodsList from "../../components/content/goods/GoodsList";
-  //import GoodsListItem from "../../components/content/goods/GoodsListItem";
+  import BackTop from "../../components/content/backTop/BackTop";
   import NavBar from "../../components/common/navbar/NavBar";
   import scroll from "../../components/common/scroll/scroll";
 
@@ -40,6 +41,7 @@
 
         TabControl,
         GoodsList,
+        BackTop,
         //GoodsListItem,
         NavBar,
         scroll,
@@ -54,7 +56,8 @@
             "sell": {page: 0,list: []},
           },
           //设置默认类型pop
-          currentType: "pop"
+          currentType: "pop" ,
+          isShowBackTop: false
         }
     },
     //不要过长的代码展示在标签中
@@ -87,7 +90,13 @@
                 break
         }
       },
-
+      backClick() {
+        this.$refs.scroll.scrollTo(0,0)
+      },
+      contentScroll(position){
+        //取到BackTop的show值与位置的y值进行比较（y值原来是负值需要取到他的绝对值）
+      this.isShowBackTop = (-position.y) > 1000
+      },
           //网络请求相关的方法
           getHomeMultidata() {
             getHomeMultidata().then(res =>{
