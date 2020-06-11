@@ -3,7 +3,11 @@
   <nav-bar class="home-nav">
     <div slot="center">购物街</div>
   </nav-bar>
-  <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+  <scroll class="content" ref="scroll"
+          :probe-type="3"
+          @scroll="contentScroll"
+          :pull-up-load="true"
+          @pullingUp="loadMore">
     <home-swiper :banners="banners"></home-swiper>
     <recommend-view :recommends="recommends"></recommend-view>
     <feature-view></feature-view>
@@ -97,6 +101,10 @@
         //取到BackTop的show值与位置的y值进行比较（y值原来是负值需要取到他的绝对值）
       this.isShowBackTop = (-position.y) > 1000
       },
+      //通过调用封装的网络请求实现页面的数据加载
+      loadMore(){
+        this.getHomeGoods(this.currentType)
+      },
           //网络请求相关的方法
           getHomeMultidata() {
             getHomeMultidata().then(res =>{
@@ -110,6 +118,8 @@
         getHomeGoods(type,page).then(res =>{
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page += 1
+          //标识一下上拉加载已经结束
+          this.$refs.scroll.finishPullUp()
         })
       }
     }
