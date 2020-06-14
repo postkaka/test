@@ -3,16 +3,27 @@
   <nav-bar class="home-nav">
     <div slot="center">购物街</div>
   </nav-bar>
+  <tab-control class="tab-control" :titles="['流行','新款','精选']"
+               @itemClick="itemClick"
+               ref="tabControl1"
+               v-show="isTabFixed"
+  />
   <scroll class="content" ref="scroll"
           :probe-type="3"
           @scroll="contentScroll"
           :pull-up-load="true"
-          @pullingUp="loadMore">
-    <home-swiper :banners="banners"></home-swiper>
+          @pullingUp="loadMore"
+          >
+    <home-swiper :banners="banners"
+                 @swiperImageLoad="swiperImageLoad"
+    ></home-swiper>
     <recommend-view :recommends="recommends"></recommend-view>
     <feature-view></feature-view>
-    <tab-control class="tab-control" :titles="['流行','新款','精选']"
-                 @itemClick="itemClick"></tab-control>
+    <tab-control  :titles="['流行','新款','精选']"
+                 @itemClick="itemClick"
+                 ref="tabControl2"
+
+    />
     <goods-list :goods="showGoods"></goods-list>
   </scroll>
 <!--  加v-show就是为了对下面的滚动位置进行判断如果大于1000v-show的值为true，反之为flase-->
@@ -34,6 +45,7 @@
 
   import {getHomeMultidata} from "../../network/home";
   import {getHomeGoods} from "../../network/home";
+  import {debounce} from "../../common/utils";
 
   export default {
         name: "home",
@@ -61,7 +73,9 @@
           },
           //设置默认类型pop
           currentType: "pop" ,
-          isShowBackTop: false
+          isShowBackTop: false,
+          taboffsetTop: 0 ,
+          isTabFixed: false
         }
     },
     //不要过长的代码展示在标签中
@@ -77,9 +91,21 @@
     this.getHomeGoods("pop")
     this.getHomeGoods("new")
     this.getHomeGoods("sell")
+    //3.监听item中图片的加载完成
+
   },
+    mounted() {
+          //1.图片完成的事件加载监听
+          const refresh= debounce(this.$refs.scroll.refresh,500)
+      this.$bus.$on("itemImageLoad",() =>{
+        refresh()
+      })
+
+
+    },
     methods: {
           //事件监听相关的方法
+
       itemClick(index) {
         //设置一个switch语法进行条件判断
         switch (index) {
@@ -93,18 +119,31 @@
               this.currentType = "sell"
                 break
         }
+        this.$refs.tabControl1.currentIndex =  index
+        this.$refs.tabControl2.currentIndex = index
       },
       backClick() {
         this.$refs.scroll.scrollTo(0,0)
       },
       contentScroll(position){
+        //1.判断BackTop是否显示
         //取到BackTop的show值与位置的y值进行比较（y值原来是负值需要取到他的绝对值）
       this.isShowBackTop = (-position.y) > 1000
+        //2.决定tabControl是否吸顶（position： fixed）
+        this.isTabFixed = (-position.y) > this.taboffsetTop
       },
-      //通过调用封装的网络请求实现页面的数据加载
-      loadMore(){
+      loadMore() {
         this.getHomeGoods(this.currentType)
       },
+      //2.获取tabControl的offsetTop
+      // 所有的组件都有一个属性$el;用于获取组件中的元素
+      swiperImageLoad() {
+        this.taboffsetTop = this.$refs.tabControl2.$el.offsetTop
+      },
+
+      // loadMore(){
+      //   this.getHomeGoods(this.currentType)
+      // },
           //网络请求相关的方法
           getHomeMultidata() {
             getHomeMultidata().then(res =>{
@@ -118,7 +157,7 @@
         getHomeGoods(type,page).then(res =>{
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page += 1
-          //标识一下上拉加载已经结束
+
           this.$refs.scroll.finishPullUp()
         })
       }
@@ -137,17 +176,14 @@
 .home-nav{
   background-color: var(--color-tint);
   color: #ffffff;
- position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9;
+ /* 在使用浏览器原生滚动使用一下属性，为导航不随浏览器一起滚动*/
+ /*!*position: fixed;*!*/
+ /*!* top: 0;*!*/
+ /*!* left: 0;*!*/
+ /*!* right: 0;*!*/
+ /*!* z-index: 9;*!*/
 }
-  .tab-control {
-    position: sticky;
-    top:44px;
-    z-index: 4;
-  }
+
   /*.content {*/
   /*  height: calc(100% - 93px);*/
   /*  margin-top: 44px;*/
@@ -161,5 +197,15 @@
     bottom: 49px;
     left: 0;
     right: 0;
+  }
+  .fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 44px
+  }
+  .tab-control {
+    position: relative;
+    z-index: 9;
   }
 </style>
