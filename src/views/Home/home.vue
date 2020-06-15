@@ -22,7 +22,6 @@
     <tab-control  :titles="['流行','新款','精选']"
                  @itemClick="itemClick"
                  ref="tabControl2"
-
     />
     <goods-list :goods="showGoods"></goods-list>
   </scroll>
@@ -75,7 +74,8 @@
           currentType: "pop" ,
           isShowBackTop: false,
           taboffsetTop: 0 ,
-          isTabFixed: false
+          isTabFixed: false,
+          saveY: 0,
         }
     },
     //不要过长的代码展示在标签中
@@ -84,7 +84,7 @@
             return this.goods[this.currentType].list
           }
     },
-  created(){
+    created(){
     //1.请求多个数据
    this.getHomeMultidata()
     //2.请求商品数据
@@ -95,13 +95,18 @@
 
   },
     mounted() {
-          //1.图片完成的事件加载监听
-          const refresh= debounce(this.$refs.scroll.refresh,500)
-      this.$bus.$on("itemImageLoad",() =>{
-        refresh()
+    //1.图片完成的事件加载监听
+     const refresh= debounce(this.$refs.scroll.refresh,500)
+     this.$bus.$on("itemImageLoad",() =>{
+       refresh()
       })
-
-
+    },
+    activated() {
+      this.$refs.scroll.scrollTo(0,this.saveY,0)
+      this.$refs.scroll.refresh()
+    },
+    deactivated() {
+      this.saveY = this.$refs.scroll.getScrollY()
     },
     methods: {
           //事件监听相关的方法
@@ -145,7 +150,7 @@
       //   this.getHomeGoods(this.currentType)
       // },
           //网络请求相关的方法
-          getHomeMultidata() {
+      getHomeMultidata() {
             getHomeMultidata().then(res =>{
               //console.log(res);
               this.banners = res.data.banner.list;
@@ -197,12 +202,6 @@
     bottom: 49px;
     left: 0;
     right: 0;
-  }
-  .fixed {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 44px
   }
   .tab-control {
     position: relative;

@@ -59,7 +59,12 @@
           },
           finishPullUp() {
             this.scroll && this.scroll.finishPullUp()
-          }
+          },
+        //三目运算符判断
+        getScrollY() {
+            return this.scroll ? this.scroll.y : 0
+        }
+
       }
     }
 </script>

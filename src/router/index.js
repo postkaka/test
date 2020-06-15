@@ -5,6 +5,7 @@ const cart = () => import("views/Cart/cart.vue")
 const category = () => import("views/Category/category.vue")
 const home = () => import("views/Home/home.vue")
 const profile = () => import("views/profile/profile.vue")
+const detail = () => import("views/detail/detail.vue")
 
 Vue.use(VueRouter)
 const routes = [
@@ -27,6 +28,10 @@ const routes = [
   {
     path: "/profile",
     component: profile
+  },
+  {
+    path: "/detail",
+    component: detail
   }
 ]
 const router = new VueRouter({
