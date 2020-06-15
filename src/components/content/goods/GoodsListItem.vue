@@ -24,8 +24,9 @@
           imageLoad() {
             this.$bus.$emit("itemImageLoad")
           },
+        //跳转到详情页
         itemClick() {
-          this.$router.push("/detail")
+          this.$router.push("/detail/" + this.goodsitem.iid)
         }
       }
     }

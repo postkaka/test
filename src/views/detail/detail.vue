@@ -1,10 +1,20 @@
 <template>
-<div class="detail">详情页</div>
+<div class="detail">
+{{iid}}
+</div>
 </template>
 
 <script>
     export default {
-        name: "detail"
+        name: "detail",
+      data() {
+          return{
+           iid: null
+          }
+      },
+      created() {
+          this.iid = this.$route.params.iid
+      }
     }
 </script>
 
