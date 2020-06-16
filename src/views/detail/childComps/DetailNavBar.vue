@@ -6,12 +6,11 @@
         </div>
         <div slot="center" class="title">
           <div v-for="(item,index) in titles"
-               :key="item.id"
+               :key="index"
                class="title-item"
-               :class="{active: index === currentIndex}"
-               @click="titleClick(index)">
-            {{item}}
-          </div>
+               :class="{cative: index === currentIndex}"
+               @click="titlesClick(index)"
+          >{{item}}</div>
         </div>
       </nav-bar>
     </div>
@@ -20,8 +19,8 @@
 <script>
   import NavBar from "../../../components/common/navbar/NavBar";
     export default {
-        name: "DetailNavBar",
-      components:{
+        name: "detailNavBar",
+      components: {
           NavBar
       },
       data() {
@@ -31,28 +30,27 @@
           }
       },
       methods: {
-          titleClick(index) {
-            this.currentIndex = index
-          },
+        titlesClick(index) {
+        this.currentIndex = index
+        },
         backClick() {
-            this.$router.go(-1)
+          this.$router.go(-1)
         }
       }
     }
 </script>
 
 <style scoped>
-.title {
-  display: flex;
-  font-size: 13px;
-}
+  .title {
+    display: flex;
+  }
   .title-item {
     flex: 1;
   }
-  .active {
+  .cative {
     color: var(--color-hight-text);
   }
-  .back img{
-    margin-top: 12px;
+  .back img {
+    margin-top: 13px;
   }
 </style>
