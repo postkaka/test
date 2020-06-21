@@ -7,6 +7,12 @@ return request({
   }
 })
 }
+
+export function getRecommend() {
+return request({
+  url:'/recommend'
+})
+}
 //将详情组件中的需要的数据进行整合
 export class Goods {
   constructor(itemInfo, columns ,services) {

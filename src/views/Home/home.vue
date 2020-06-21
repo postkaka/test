@@ -38,13 +38,13 @@
 
   import TabControl from "../../components/content/tabControl/TabControl"
   import GoodsList from "../../components/content/goods/GoodsList";
-  import BackTop from "../../components/content/backTop/BackTop";
   import NavBar from "../../components/common/navbar/NavBar";
   import scroll from "../../components/common/scroll/scroll";
 
   import {getHomeMultidata} from "../../network/home";
   import {getHomeGoods} from "../../network/home";
-  import {debounce} from "../../common/utils";
+  //import {debounce} from "../../common/utils";
+  import {itemListenerMixin,backTopMixin} from "../../common/mixin"
 
   export default {
         name: "home",
@@ -56,11 +56,10 @@
 
         TabControl,
         GoodsList,
-        BackTop,
-        //GoodsListItem,
         NavBar,
         scroll,
       },
+    mixins: [itemListenerMixin,backTopMixin],
     data(){
         return {
           banners:[],
@@ -72,7 +71,6 @@
           },
           //设置默认类型pop
           currentType: "pop" ,
-          isShowBackTop: false,
           taboffsetTop: 0 ,
           isTabFixed: false,
           saveY: 0,
@@ -95,18 +93,24 @@
 
   },
     mounted() {
-    //1.图片完成的事件加载监听
-     const refresh= debounce(this.$refs.scroll.refresh,500)
-     this.$bus.$on("itemImageLoad",() =>{
-       refresh()
-      })
+    // //1.图片完成的事件加载监听
+    //  let refresh= debounce(this.$refs.scroll.refresh,500)
+    //   //对监听的事件进行保存
+    //   this.itemImgListener = this.$bus.$on("itemImageLoad",() =>{
+    //     refresh()
+    //   })
+
     },
     activated() {
-      this.$refs.scroll.scrollTo(0,this.saveY,0)
       this.$refs.scroll.refresh()
+      this.$refs.scroll.scrollTo(0,this.saveY,0)
     },
     deactivated() {
+          //离开时保存y值
       this.saveY = this.$refs.scroll.getScrollY()
+     // console.log(this.saveY);
+      //取消全局事件监听
+      this.$bus.$off("itemImgLoad",this.itemImgListener)
     },
     methods: {
           //事件监听相关的方法
@@ -126,9 +130,6 @@
         }
         this.$refs.tabControl1.currentIndex =  index
         this.$refs.tabControl2.currentIndex = index
-      },
-      backClick() {
-        this.$refs.scroll.scrollTo(0,0)
       },
       contentScroll(position){
         //1.判断BackTop是否显示
