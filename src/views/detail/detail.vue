@@ -14,7 +14,7 @@
       <goods-list :goods="recommends" ref="recommend"></goods-list>
     </div>
   </scroll>
-      <detail-bottom-bar></detail-bottom-bar>
+      <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
   <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
 </div>
 </template>
@@ -133,6 +133,17 @@
           }
           this.isShowBackTop = (-position.y) > 1000
         },
+        addToCart() {
+          //1.获取购物车需要展示信息
+          const product = {}
+          product.image = this.topImages[0];
+          product.title = this.goods.title;
+          product.desc = this.goods.desc;
+          product.price = this.goods.realPrice;
+          product.iid = this.iid;
+          //2.将商品添加到购物车里面
+          this.$store.commit("addCart",product)
+        }
       },
       mounted() {
           //拿到对应组件的offsetTop值

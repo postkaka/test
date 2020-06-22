@@ -18,6 +18,7 @@ export class Goods {
   constructor(itemInfo, columns ,services) {
     this.title = itemInfo.title
     this.desc = itemInfo.desc
+    this.desc = itemInfo.desc
     this.price = itemInfo.price
     this.oldPrice = itemInfo.oldPrice
     this.discount = itemInfo.discountDesc
