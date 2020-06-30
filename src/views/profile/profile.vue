@@ -1,127 +1,91 @@
 <template>
-<div>
-  <scroll class="content" >
-    <ul>
-      <li>个人信息1</li>
-      <li>个人信息2</li>
-      <li>个人信息3</li>
-      <li>个人信息4</li>
-      <li>个人信息5</li>
-      <li>个人信息6</li>
-      <li>个人信息7</li>
-      <li>个人信息8</li>
-      <li>个人信息9</li>
-      <li>个人信息10</li>
-      <li>个人信息11</li>
-      <li>个人信息12</li>
-      <li>个人信息13</li>
-      <li>个人信息14</li>
-      <li>个人信息15</li>
-      <li>个人信息16</li>
-      <li>个人信息17</li>
-      <li>个人信息18</li>
-      <li>个人信息19</li>
-      <li>个人信息20</li>
-      <li>个人信息21</li>
-      <li>个人信息22</li>
-      <li>个人信息23</li>
-      <li>个人信息24</li>
-      <li>个人信息25</li>
-      <li>个人信息26</li>
-      <li>个人信息27</li>
-      <li>个人信息28</li>
-      <li>个人信息29</li>
-      <li>个人信息30</li>
-      <li>个人信息31</li>
-      <li>个人信息32</li>
-      <li>个人信息33</li>
-      <li>个人信息34</li>
-      <li>个人信息35</li>
-      <li>个人信息36</li>
-      <li>个人信息37</li>
-      <li>个人信息38</li>
-      <li>个人信息39</li>
-      <li>个人信息40</li>
-      <li>个人信息41</li>
-      <li>个人信息42</li>
-      <li>个人信息43</li>
-      <li>个人信息44</li>
-      <li>个人信息45</li>
-      <li>个人信息46</li>
-      <li>个人信息47</li>
-      <li>个人信息48</li>
-      <li>个人信息49</li>
-      <li>个人信息50</li>
-      <li>个人信息51</li>
-      <li>个人信息52</li>
-      <li>个人信息53</li>
-      <li>个人信息54</li>
-      <li>个人信息55</li>
-      <li>个人信息56</li>
-      <li>个人信息57</li>
-      <li>个人信息58</li>
-      <li>个人信息59</li>
-      <li>个人信息60</li>
-      <li>个人信息61</li>
-      <li>个人信息62</li>
-      <li>个人信息63</li>
-      <li>个人信息64</li>
-      <li>个人信息65</li>
-      <li>个人信息66</li>
-      <li>个人信息67</li>
-      <li>个人信息68</li>
-      <li>个人信息69</li>
-      <li>个人信息70</li>
-      <li>个人信息71</li>
-      <li>个人信息72</li>
-      <li>个人信息73</li>
-      <li>个人信息74</li>
-      <li>个人信息75</li>
-      <li>个人信息76</li>
-      <li>个人信息77</li>
-      <li>个人信息78</li>
-      <li>个人信息79</li>
-      <li>个人信息80</li>
-      <li>个人信息81</li>
-      <li>个人信息82</li>
-      <li>个人信息83</li>
-      <li>个人信息84</li>
-      <li>个人信息85</li>
-      <li>个人信息86</li>
-      <li>个人信息87</li>
-      <li>个人信息88</li>
-      <li>个人信息89</li>
-      <li>个人信息90</li>
-      <li>个人信息91</li>
-      <li>个人信息92</li>
-      <li>个人信息93</li>
-      <li>个人信息94</li>
-      <li>个人信息95</li>
-      <li>个人信息96</li>
-      <li>个人信息97</li>
-      <li>个人信息98</li>
-      <li>个人信息99</li>
-      <li>个人信息100</li>
-    </ul>
-  </scroll>
+<div class="profile">
+ <nav-bar class="nav-bar"><div slot="center">离岸的店</div></nav-bar>
+  <login></login>
+  <div class="wallet">
+    <div class="account">
+      <div class="number">
+        <span>0.00</span>元
+      </div>
+      <div class="account-info">我的余额</div>
+    </div>
+    <div class="account">
+      <div class="number">
+        <span>0</span>个
+      </div>
+      <div class="account-info">我的优惠</div>
+    </div>
+    <div class="account">
+      <div class="number">
+        <span>0</span>分
+      </div>
+      <div class="account-info">我的积分</div>
+    </div>
+  </div>
+  <list-view :list-content="orderList" class="order-list"></list-view>
+  <list-view :list-content="serviceList" class="service-list"></list-view>
 </div>
 </template>
 
 <script>
-  import scroll from "../../components/common/scroll/scroll";
+ import NavBar from "../../components/common/navbar/NavBar";
+ import Login from "../../components/common/login/Login";
+ import ListView from "./childComps/ListView";
     export default {
         name: "profile",
      components :{
-          scroll
-     }
+       NavBar,
+       Login,
+       ListView
+     },
+      data() {
+        return{
+          orderList: [
+            {img:require("assets/img/profile/wodexiaoxi.svg"),title:"我的消息"},
+            {img:require("assets/img/profile/jifenshangcheng.svg"),title:"积分商城"},
+            {img:require("assets/img/profile/huiyuanqia.svg"),title:"会员卡"}
+          ],
+          serviceList: [
+            {img:require("assets/img/profile/gouwuche.svg"),title:"我的购物车"},
+            {img:require("assets/img/profile/app.svg"),title:"下载购物车APP"}
+          ]
+        }
+      }
 
     }
 </script>
 
 <style scoped>
-.content{
-  height: 300px;
-  background-color: red;
-  overflow: hidden;
-}
+  .profile {
+    background-color: #f2f2f2;
+  }
+ .nav-bar {
+   background-color: #ff8198;
+   color: #eeeeee;
+   font-weight: 900;
+ }
+ .wallet {
+   display: flex;
+ }
+ .wallet .account {
+   width: 100%;
+   background-color: #fff;
+   margin-right: 1px;
+   text-align: center;
+   border-right: 1px solid rgba(100,100,100,.1);
+   padding-top: 10px;
+   padding-bottom: 10px;
+ }
+ .wallet .number {
+  font-weight: 700;
+   color: red;
+   padding-bottom: 7px;
+   padding-top: 10px;
+ }
+ .wallet:last-of-type .account{
+   border-right: none;
+ }
+  .order-list,  .service-list{
+    margin-top: 12px;
+  }
 </style>
